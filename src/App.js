@@ -7,6 +7,7 @@ import { createTheme } from '@mui/material/styles';
 import Navigation from './components/Navigation';
 import DatasetUpload from './components/DatasetUpload';
 import ExperimentDashboard from './components/ExperimentDashboard';
+import DatasetAugmentation from './components/DatasetAugmentation';
 import './App.css';
 
 // Create theme
@@ -80,7 +81,7 @@ function App() {
             } />
             <Route path="/upload" element={<DatasetUpload />} />
             <Route path="/monitor" element={<ExperimentDashboard />} />
-            <Route path="/augment" element={<div>Dataset Augmentation (Coming Soon)</div>} />
+            <Route path="/augment" element={<DatasetAugmentation />} />
           </Routes>
         </Box>
       </Router>

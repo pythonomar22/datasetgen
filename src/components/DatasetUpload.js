@@ -20,6 +20,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 const DatasetUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null);
+  const [uploadedDatasets, setUploadedDatasets] = useState([]);
   const [activeTab, setActiveTab] = useState(0);
   const [datasetVersions] = useState([
     { id: 1, name: 'v1.0', date: '2024-01-10', samples: 1000 },
@@ -44,10 +45,27 @@ const DatasetUpload = () => {
     if (!file) return;
     
     setUploading(true);
-    // TODO: Implement actual upload logic
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate upload
-    setUploading(false);
-    setFile(null);
+    // Simulate upload and store file data
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const newDataset = {
+        id: Date.now(),
+        name: file.name,
+        type: file.type,
+        data: e.target.result,
+        date: new Date().toISOString()
+      };
+      
+      // Store in localStorage for demo
+      const existingDatasets = JSON.parse(localStorage.getItem('datasets') || '[]');
+      const updatedDatasets = [...existingDatasets, newDataset];
+      localStorage.setItem('datasets', JSON.stringify(updatedDatasets));
+      
+      setUploadedDatasets(updatedDatasets);
+      setUploading(false);
+      setFile(null);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -65,7 +83,7 @@ const DatasetUpload = () => {
       </Typography>
       <Box sx={{ my: 2 }}>
         <input
-          accept=".csv,.json,.txt"
+          accept="image/*,.csv,.json,.txt"
           style={{ display: 'none' }}
           id="dataset-file"
           type="file"
